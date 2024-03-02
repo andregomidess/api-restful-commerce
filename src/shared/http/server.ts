@@ -9,7 +9,6 @@ app.use(cors());
 app.use(express.json());
 
 app.use(routes);
-//ssss
 
 app.use(
   (error: Error, request: Request, responde: Response, next: NextFunction) => {
