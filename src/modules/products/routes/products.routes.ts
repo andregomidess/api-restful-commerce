@@ -20,7 +20,7 @@ productsRoutes.post(
   celebrate({
     [Segments.BODY]: {
       name: Joi.string().required(),
-      quantity: Joi.string().required(),
+      quantity: Joi.number().required(),
       price: Joi.number().precision(2).required(),
     },
   }),
