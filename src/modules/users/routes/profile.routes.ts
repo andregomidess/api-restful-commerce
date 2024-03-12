@@ -28,7 +28,10 @@ profileRouter.put(
       password: Joi.string().optional(),
       password_confirmation: Joi.string()
         .valid(Joi.ref('password'))
-        .when('password', {}),
+        .when('password', {
+          is: Joi.exist(),
+          then: Joi.required(),
+        }),
     },
   }),
   profileController.update,
