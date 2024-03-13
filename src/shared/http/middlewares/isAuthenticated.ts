@@ -1,6 +1,6 @@
 import AppError from '@shared/errors/AppError';
-import { Response, Request, NextFunction } from 'express'
-import { verify } from 'jsonwebtoken';
+import { Response, Request, NextFunction } from 'express';
+import { Secret, verify } from 'jsonwebtoken';
 import authConfig from '@config/auth';
 
 interface ITokenPayload {
@@ -9,7 +9,11 @@ interface ITokenPayload {
   sub: string;
 }
 
-export default function isAuthenticated(req: Request, res: Response, next: NextFunction): void{
+export default function isAuthenticated(
+  req: Request,
+  res: Response,
+  next: NextFunction,
+): void {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
@@ -19,18 +23,16 @@ export default function isAuthenticated(req: Request, res: Response, next: NextF
   const [, token] = authHeader.split(' ');
 
   try {
-    const decodeToken = verify(token, authConfig.jwt.secret);
+    const decodeToken = verify(token, authConfig.jwt.secret as Secret);
 
     const { sub } = decodeToken as ITokenPayload;
 
     req.user = {
       id: sub,
-    }
+    };
 
     return next();
-  }catch (err) {
+  } catch (err) {
     throw new AppError('Invalid JWT Token');
   }
-
 }
-
